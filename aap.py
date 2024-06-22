@@ -17,6 +17,7 @@ data=[]
 onerec=[]
 count_num=0
 tag=0
+ntt=''
 dict={
     '1;':'初一',
     '2;':'初二',
@@ -72,7 +73,7 @@ def getallvalues():
 
 def settablevalue(endtime):
     global count_num
-
+    global ntt
     nameitem=QTableWidgetItem(name)
     i=count_num
     ui.tableWidget.setItem(i,0,nameitem)
@@ -83,8 +84,8 @@ def settablevalue(endtime):
     enditem = QTableWidgetItem(endtime[11:])
     ui.tableWidget.setItem(i, 3, enditem)
 
-    gr=playarea_to_text()
-    gitem=QTableWidgetItem(gr)
+    playarea_to_text()
+    gitem=QTableWidgetItem(ntt)
     ui.tableWidget.setItem(i,4,gitem)
     count_num+=1
 
@@ -122,11 +123,11 @@ def get_duration_mp3(audio_file):
 
 
 def playarea_to_text():
+    global ntt
     global play_area
-    ntt = ''
     for v in play_area:
         ntt = ntt + str(v)+' -> '
-    return ntt
+
 ## 将字符串的starttime  加上 MP3的时间长度，最终获得 音乐终止时间
 def changestrtotime(stime):
     global lasttime
@@ -176,10 +177,13 @@ def add_btn():
     global starttime
     global tag
     global play_area
+    global ntt
     getallvalues()
     ## 如果没有输入任何的内容
     if play_area==[]   or starttime=='00:00:00' or medias=='' or name==''  :
         QMessageBox.critical(None, "错误", "有信息漏填")
+        tag=0
+        play_area=[]
     else:
         ### 获取每个项目的内容，显示出来在table
         endtime=changestrtotime(starttime)
@@ -197,6 +201,7 @@ def add_btn():
         onerec=[]
         play_area=[]
         tag=0
+        ntt=''
         # 使得原本的内容清空
         ui.lineEdit.setText('')
         ui.lineEdit_2.setText('')
